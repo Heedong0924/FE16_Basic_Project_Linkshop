@@ -7,7 +7,7 @@ export const ColorTypes = {
   SECONDARY_GRAY_200: 'secGray200',
   SECONDARY_GRAY_300: 'secGray300',
 
-  SECONDARY_WHITE_50: 'secWhite500',
+  SECONDARY_WHITE_50: 'secWhite50',
   SECONDARY_WHITE_100: 'secWhite100',
 };
 
