@@ -81,3 +81,65 @@ export const deleteLike = async linkShopId => {
     throw error;
   }
 };
+
+/**
+ * 링크샵 상세 정보를 가져오는 함수
+ * @param {number} linkshopId - 조회할 링크샵 ID
+ * @returns {object} 링크샵 상세 데이터
+ */
+export const getLinkshopDetail = async linkshopId => {
+  try {
+    const res = await instance.get(`/linkshops/${linkshopId}`);
+    return res.data;
+  } catch (error) {
+    console.error('상세 조회 실패', error);
+    throw error;
+  }
+};
+
+/**
+ * 링크샵을 수정하는 함수
+ * @param {number} linkshopId - 수정할 링크샵 ID
+ * @param {FormData} formData - 수정할 데이터
+ * @returns {object} 수정 후 링크샵 목록
+ */
+export const updateLinkshop = async (linkshopId, formData) => {
+  try {
+    const res = await instance.put(`/linkshops/${linkshopId}`, formData, {
+      headers: {},
+    });
+    return res.data;
+  } catch (error) {
+    console.error('링크샵 수정 실패', error);
+    throw error;
+  }
+};
+
+const IMAGE_UPLOAD_FULL_URL = 'https://linkshop-api.vercel.app/images/upload';
+
+const imageUploadInstance = axios.create({
+  baseURL: 'https://linkshop-api.vercel.app',
+  timeout: 15000,
+});
+
+/**
+ * 이미지를 업로드하는 함수
+ * @param {File} file
+ * @returns {string} 업로드된 이미지의 URL
+ */
+export const uploadImage = async file => {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const res = await imageUploadInstance.post('/images/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res.data.url;
+  } catch (error) {
+    console.error('이미지 업로드 실패:', error);
+    throw error.response?.data?.message || '이미지 업로드에 실패했습니다.';
+  }
+};
