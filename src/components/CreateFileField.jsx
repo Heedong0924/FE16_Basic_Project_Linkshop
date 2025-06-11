@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { FieldContainer, NoneValidMessage } from './CreateField';
 import ImageFormatErrorModal from './ImageFormatErrorModal';
 import closeBtn from '../assets/icon/btn_close.png';
-import defaultProductImg from '../assets/img/img_product.png';
 import defaultShopImg from '../assets/img/img_profile.png';
 import { applyFontStyles } from '../styles/mixins';
 import { FontTypes, ColorTypes } from '../styles/theme';
@@ -86,19 +85,22 @@ const FileField = ({
 }) => {
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
   const [previewImage, setPreviewImage] = useState(() => {
-    return label === '프로필 이미지' ? defaultShopImg : defaultProductImg;
+    return label === '프로필 이미지' ? defaultShopImg : null;
   });
-  const [isFileSelected, setIsFileSelected] = useState(true);
+  const [isFileSelected, setIsFileSelected] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalMessage = useRef('');
 
   const loadDefaultFile = async () => {
-    const defaultImg =
-      label === '프로필 이미지' ? defaultShopImg : defaultProductImg;
+    const defaultImg = label === '프로필 이미지' ? defaultShopImg : null;
+    if (!defaultImg) {
+      return;
+    }
     const res = await fetch(defaultImg);
     const blob = await res.blob();
     const file = new File([blob], 'default-image.png', { type: blob.type });
     setSelectedFileUrl(prev => file);
+    setIsFileSelected(prev => true);
     onCheckValidForm(prev => true);
   };
 
@@ -175,16 +177,17 @@ const FileField = ({
         />
         <STTitle>{label}</STTitle>
         <STPlaceholder>{placeholder}</STPlaceholder>
-        {isFileSelected === false ? (
-          <NoneValidMessage>{NONE_VALID_MESSAGE}</NoneValidMessage>
-        ) : (
+        {previewImage ? (
           <PreviewWrapper>
             <PreviewImage src={previewImage} alt='첨부 파일 미리보기 이미지' />
             <DeletePreviewButton onClick={handleDeleteImage}>
               <ButtonX src={closeBtn} alt='업로드 이미지를 취소하는 x버튼' />
             </DeletePreviewButton>
           </PreviewWrapper>
-        )}
+        ) : undefined}
+        {isFileSelected === false ? (
+          <NoneValidMessage>{NONE_VALID_MESSAGE}</NoneValidMessage>
+        ) : undefined}
       </FieldContainer>
       <ImageFormatErrorModal
         isOpen={isModalOpen}
