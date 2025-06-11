@@ -133,6 +133,13 @@ const DetailShopPage = () => {
     setCurrentLikeCount(data.likes);
   };
 
+  const showToast = message => {
+    setToastMessage('');
+    setTimeout(() => {
+      setToastMessage(message);
+    }, 0);
+  };
+
   useEffect(() => {
     loadData();
   }, []);
@@ -143,15 +150,6 @@ const DetailShopPage = () => {
 
   const handleGoBack = () => {
     navigate('/list');
-  };
-
-  const handleShareLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      alert('URL이 복사되었습니다!');
-    } catch {
-      alert('URL 복사에 실패했습니다.');
-    }
   };
 
   const handleToggleActionMenu = () => {
@@ -170,6 +168,10 @@ const DetailShopPage = () => {
 
   const handlePasswordSubmit = async password => {
     // ... (비밀번호 유효성 검사) ...
+    if (!password) {
+      setPasswordError('비밀번호를 입력해주세요.');
+      return;
+    }
     try {
       await deleteLinkshop(id, password);
 
@@ -182,7 +184,10 @@ const DetailShopPage = () => {
     } catch (error) {
       // --- 실패했을 때 실행될 코드 ---
       const errorMessage = error.response?.data?.message;
-      if (errorMessage === 'Validation Failed') {
+      if (
+        errorMessage === 'Bad Request' ||
+        errorMessage === 'Validation Failed'
+      ) {
         setPasswordError('비밀번호가 올바르지 않습니다.');
       } else {
         setPasswordError(
@@ -191,6 +196,7 @@ const DetailShopPage = () => {
       }
     }
   };
+
   const handleCloseModal = () => {
     setIsPasswordModalOpen(false);
     setPasswordError('');
@@ -207,7 +213,7 @@ const DetailShopPage = () => {
             currentLikeCount={currentLikeCount}
             isLiked={isLiked}
             handleToggleLike={() => handleToggleLike(id, isLiked)}
-            onShareClick={handleShareLink}
+            onShowToast={showToast}
             onMoreOptionsClick={handleToggleActionMenu}
             isActionMenuOpen={isActionMenuOpen}
             onEditActionClick={handleEditClick}
