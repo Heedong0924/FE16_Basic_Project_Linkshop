@@ -43,14 +43,13 @@ const INITIAL_PRODUCT = {
   id: 0,
 };
 
-const CreateProducts = ({ setIsDisabled, onSaveCompleteData }) => {
+const CreateProducts = ({ onSaveCompleteData }) => {
   const [productList, setProductList] = useState([INITIAL_PRODUCT]);
   const productKey = useRef(0);
 
   const handleAddProduct = () => {
     productKey.current += 1;
     setProductList(prev => [{ id: productKey.current }, ...prev]);
-    setIsDisabled(prev => true);
   };
 
   useEffect(() => {
@@ -79,7 +78,6 @@ const CreateProducts = ({ setIsDisabled, onSaveCompleteData }) => {
             onDeleteProduct={setProductList}
             onSaveProductList={setProductList}
             productListLength={productList.length}
-            setIsDisabled={setIsDisabled}
           />
         ); //idkey: input-label 1대1 대응 위한 키
       })}

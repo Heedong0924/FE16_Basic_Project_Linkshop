@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { styled } from 'styled-components';
 
 import visibilityOffIcon from '../assets/icon/btn_visibility_off.svg?url';
 import visibilityOnIcon from '../assets/icon/btn_visibility_on.svg';
+import { CreatePageContext } from '../pages/CreateShopPage';
 import { applyFontStyles } from '../styles/mixins';
 import { FontTypes, ColorTypes } from '../styles/theme';
 import theme from '../styles/theme';
@@ -48,8 +49,9 @@ const Field = ({
   validation,
   onCheckValidForm,
   onSaveProductInfo,
-  setIsDisabled,
 }) => {
+  const { isValidating, setIsValidating, setIsInvalidDetected } =
+    useContext(CreatePageContext);
   const [value, setValue] = useState('');
   const [displayedValue, setDisplayedValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -80,30 +82,16 @@ const Field = ({
     }
   };
 
-  const handleValidation = e => {
+  const handleCheckEmpty = e => {
     setIsFocused(prev => false);
     if (!e.target.value) {
       setNoneValidMessage(prev => '필수 입력 항목입니다.');
       setIsFieldValid(prev => false);
       onCheckValidForm(prev => false);
-      setIsDisabled(prev => true);
       return;
     }
-
-    if (validation) {
-      const message = validation(e.target.value);
-      if (message !== 'valid') {
-        setNoneValidMessage(prev => message);
-        setIsFieldValid(prev => false);
-        onCheckValidForm(prev => false);
-        setIsDisabled(prev => true);
-        return;
-      }
-    }
-
     setIsFieldValid(prev => true);
     onCheckValidForm(prev => true);
-    setIsDisabled(prev => false);
   };
 
   const handlePriceOnFocus = e => {
@@ -140,6 +128,29 @@ const Field = ({
     });
   }, [value]);
 
+  useEffect(() => {
+    if (!isValidating) {
+      return;
+    }
+
+    if (validation) {
+      const message = validation(value);
+      if (message !== 'valid') {
+        setNoneValidMessage(prev => message);
+        setIsFieldValid(prev => false);
+        onCheckValidForm(prev => false);
+        setIsInvalidDetected(prev => true);
+        setIsValidating(prev => false);
+        return;
+      } else {
+        setIsFieldValid(prev => true);
+        setIsValidating(prev => false);
+        return;
+      }
+    }
+    setIsValidating(prev => false);
+  }, [isValidating]);
+
   return (
     <FieldContainer>
       <STLabel htmlFor={inputId}>{label}</STLabel>
@@ -151,7 +162,7 @@ const Field = ({
         value={name === 'price' && !isFocused ? displayedValue : value}
         onChange={handleInputValue}
         onFocus={handlePriceOnFocus}
-        onBlur={handleValidation}
+        onBlur={handleCheckEmpty}
       />
       {hasButton && (
         <VisibilityButton type='button' onClick={handleTogglePassword}>

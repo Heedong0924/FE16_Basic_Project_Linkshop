@@ -81,7 +81,6 @@ const FileField = ({
   label,
   onCheckValidForm,
   onSaveProductInfo,
-  setIsDisabled,
 }) => {
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
   const [previewImage, setPreviewImage] = useState(() => {
@@ -123,7 +122,6 @@ const FileField = ({
     setSelectedFileUrl(prev => renamedFile);
     setIsFileSelected(prev => true);
     onCheckValidForm(prev => true);
-    setIsDisabled(prev => false);
   };
 
   const handleDeleteImage = () => {
@@ -136,7 +134,6 @@ const FileField = ({
     setSelectedFileUrl(prev => null);
     setIsFileSelected(prev => false);
     onCheckValidForm(prev => false);
-    setIsDisabled(prev => true);
   };
 
   const handleCloseModal = () => {

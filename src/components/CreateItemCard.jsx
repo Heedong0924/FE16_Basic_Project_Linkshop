@@ -46,7 +46,6 @@ const CreateItemCard = ({
   onDeleteProduct,
   onSaveProductList,
   productListLength,
-  setIsDisabled,
 }) => {
   const [productInfo, setProductInfo] = useState({
     id: idKey,
@@ -66,7 +65,6 @@ const CreateItemCard = ({
     for (const key in productInfo) {
       if (isFormValid && isEmpty(productInfo[key])) {
         setIsFormValid(prev => null);
-        // setIsDisabled(prev => true);
         return;
       }
     }
@@ -96,7 +94,6 @@ const CreateItemCard = ({
         label='상품 대표 이미지'
         onCheckValidForm={setIsFormValid}
         onSaveProductInfo={setProductInfo}
-        setIsDisabled={setIsDisabled}
       />
       <Field
         placeholder='상품 이름을 입력해주세요.'
@@ -106,7 +103,6 @@ const CreateItemCard = ({
         name='name'
         onCheckValidForm={setIsFormValid}
         onSaveProductInfo={setProductInfo}
-        setIsDisabled={setIsDisabled}
       />
       <Field
         placeholder='원화로 표기해 주세요.'
@@ -116,7 +112,6 @@ const CreateItemCard = ({
         name='price'
         onCheckValidForm={setIsFormValid}
         onSaveProductInfo={setProductInfo}
-        setIsDisabled={setIsDisabled}
       />
     </FormContainer>
   );

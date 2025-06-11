@@ -26,7 +26,7 @@ const ContainerWrapper = styled.div`
   }
 `;
 
-const CreateShop = ({ setIsDisabled, onSaveCompleteData }) => {
+const CreateShop = ({ onSaveCompleteData }) => {
   const [shopInfo, setShopInfo] = useState({
     shop: {
       imageUrl: null,
@@ -69,7 +69,6 @@ const CreateShop = ({ setIsDisabled, onSaveCompleteData }) => {
           label='프로필 이미지'
           onCheckValidForm={setIsFormValid}
           onSaveProductInfo={setShopInfo}
-          setIsDisabled={setIsDisabled}
         />
         <Field
           placeholder='표시하고 싶은 이름을 적어 주세요.'
@@ -79,7 +78,6 @@ const CreateShop = ({ setIsDisabled, onSaveCompleteData }) => {
           name='name'
           onCheckValidForm={setIsFormValid}
           onSaveProductInfo={setShopInfo}
-          setIsDisabled={setIsDisabled}
         />
 
         <Field
@@ -91,7 +89,6 @@ const CreateShop = ({ setIsDisabled, onSaveCompleteData }) => {
           validation={validateUrl}
           onCheckValidForm={setIsFormValid}
           onSaveProductInfo={setShopInfo}
-          setIsDisabled={setIsDisabled}
         />
 
         <Field
@@ -103,7 +100,6 @@ const CreateShop = ({ setIsDisabled, onSaveCompleteData }) => {
           validation={validateUserId}
           onCheckValidForm={setIsFormValid}
           onSaveProductInfo={setShopInfo}
-          setIsDisabled={setIsDisabled}
         />
 
         <Field
@@ -116,7 +112,6 @@ const CreateShop = ({ setIsDisabled, onSaveCompleteData }) => {
           hasButton={true}
           onCheckValidForm={setIsFormValid}
           onSaveProductInfo={setShopInfo}
-          setIsDisabled={setIsDisabled}
         />
       </FormContainer>
     </ContainerWrapper>
