@@ -98,12 +98,21 @@ const ShopProfileCard = ({
   isLiked,
   currentLikeCount,
   handleToggleLike,
-  onShareClick,
+  onShowToast,
   onMoreOptionsClick,
   isActionMenuOpen,
   onEditActionClick,
   onDeleteActionClick,
 }) => {
+  const handleShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      // 부모에게서 받은 함수를 호출해서 토스트를 띄워달라고 요청합니다.
+      onShowToast('복사 완료!');
+    } catch {
+      onShowToast('복사 실패!');
+    }
+  };
   if (!shopInfo) return null;
 
   return (
@@ -116,7 +125,7 @@ const ShopProfileCard = ({
           id={shopInfo.id}
         />
         <ActionIconsGroup>
-          <IconButton onClick={onShareClick} aria-label='공유하기'>
+          <IconButton onClick={handleShareLink} aria-label='공유하기'>
             <img src={ShareIcon} alt='공유' />
           </IconButton>
           <IconButton onClick={onMoreOptionsClick} aria-label='더보기'>
