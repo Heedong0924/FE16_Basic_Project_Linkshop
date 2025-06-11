@@ -98,47 +98,60 @@ const ShopProfileCard = ({
   isLiked,
   currentLikeCount,
   handleToggleLike,
-  onShareClick,
+  onShowToast,
   onMoreOptionsClick,
   isActionMenuOpen,
   onEditActionClick,
   onDeleteActionClick,
 }) => {
+  const handleShareLink = async () => {
+    console.log('1. 공유하기 버튼 클릭됨!');
+
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      // 부모에게서 받은 함수를 호출해서 토스트를 띄워달라고 요청합니다.
+      onShowToast('복사 완료!');
+    } catch {
+      onShowToast('복사 실패!');
+    }
+  };
   if (!shopInfo) return null;
 
   return (
-    <StyledShopInfoWrapper>
-      <ShopTopControls>
-        <Likes
-          onToggleLike={handleToggleLike}
-          likes={currentLikeCount}
-          isLiked={isLiked}
-          id={shopInfo.id}
-        />
-        <ActionIconsGroup>
-          <IconButton onClick={onShareClick} aria-label='공유하기'>
-            <img src={ShareIcon} alt='공유' />
-          </IconButton>
-          <IconButton onClick={onMoreOptionsClick} aria-label='더보기'>
-            <img src={MoreIcon} alt='더보기' />
-          </IconButton>
-          {isActionMenuOpen && (
-            <ActionMenu>
-              <ActionMenuItem onClick={onEditActionClick}>
-                수정하기
-              </ActionMenuItem>
-              <ActionMenuItem onClick={onDeleteActionClick}>
-                삭제하기
-              </ActionMenuItem>
-            </ActionMenu>
-          )}
-        </ActionIconsGroup>
-      </ShopTopControls>
+    <>
+      <StyledShopInfoWrapper>
+        <ShopTopControls>
+          <Likes
+            onToggleLike={handleToggleLike}
+            likes={currentLikeCount}
+            isLiked={isLiked}
+            id={shopInfo.id}
+          />
+          <ActionIconsGroup>
+            <IconButton onClick={handleShareLink} aria-label='공유하기'>
+              <img src={ShareIcon} alt='공유' />
+            </IconButton>
+            <IconButton onClick={onMoreOptionsClick} aria-label='더보기'>
+              <img src={MoreIcon} alt='더보기' />
+            </IconButton>
+            {isActionMenuOpen && (
+              <ActionMenu>
+                <ActionMenuItem onClick={onEditActionClick}>
+                  수정하기
+                </ActionMenuItem>
+                <ActionMenuItem onClick={onDeleteActionClick}>
+                  삭제하기
+                </ActionMenuItem>
+              </ActionMenu>
+            )}
+          </ActionIconsGroup>
+        </ShopTopControls>
 
-      <ProfileImage src={shopInfo.shop.imageUrl} size='88px' />
-      <ShopName>{shopInfo.name}</ShopName>
-      <ShopHandle>@{shopInfo.userId}</ShopHandle>
-    </StyledShopInfoWrapper>
+        <ProfileImage src={shopInfo.shop.imageUrl} size='88px' />
+        <ShopName>{shopInfo.name}</ShopName>
+        <ShopHandle>@{shopInfo.userId}</ShopHandle>
+      </StyledShopInfoWrapper>
+    </>
   );
 };
 

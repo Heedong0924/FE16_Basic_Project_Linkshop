@@ -74,6 +74,13 @@ const DetailShopPage = () => {
     delayLoadingTransition: false,
   });
 
+  const showToast = message => {
+    setToastMessage('');
+    setTimeout(() => {
+      setToastMessage(message);
+    }, 0);
+  };
+
   const { execute: toggleLike } = useOptimisticUpdate(
     createLike,
     () => {
@@ -102,15 +109,6 @@ const DetailShopPage = () => {
     navigate('/list');
   };
 
-  const handleShareLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      alert('URL이 복사되었습니다!');
-    } catch {
-      alert('URL 복사에 실패했습니다.');
-    }
-  };
-
   const handleToggleActionMenu = () => {
     setIsActionMenuOpen(prev => !prev);
   };
@@ -126,9 +124,13 @@ const DetailShopPage = () => {
   };
 
   const handlePasswordSubmit = async password => {
+    if (!password) {
+      setPasswordError('비밀번호를 입력해주세요.');
+      return;
+    }
     // ... (비밀번호 유효성 검사) ...
     try {
-      await deleteLinkshop(URLid, password);
+      await deleteLinkshop(id, password);
 
       // --- 성공했을 때 실행될 코드 ---
       setIsPasswordModalOpen(false);
@@ -139,12 +141,15 @@ const DetailShopPage = () => {
     } catch (error) {
       // --- 실패했을 때 실행될 코드 ---
       const errorMessage = error.response?.data?.message;
-      if (errorMessage === 'Validation Failed') {
-        setPasswordError('비밀번호가 올바르지 않습니다.');
+      if (
+        errorMessage === 'Bad Request' || // "잘못된 요청"은 보통 비밀번호 불일치를 의미
+        errorMessage === 'Validation Failed'
+      ) {
+        // ✅ 우리가 원하는 친절한 메시지로 설정합니다.
+        setPasswordError('비밀번호가 일치하지 않습니다.');
       } else {
-        setPasswordError(
-          errorMessage || '삭제에 실패했습니다. 다시 시도해주세요.',
-        );
+        // 그 외 예상치 못한 다른 모든 서버 에러에 대한 처리
+        setPasswordError('오류가 발생했습니다. 다시 시도해주세요.');
       }
     }
   };
@@ -165,10 +170,10 @@ const DetailShopPage = () => {
         <ContentContainer>
           <ShopProfileCard
             shopInfo={shopInfo}
+            onShowToast={showToast}
             currentLikeCount={currentLikeCount}
             isLiked={isLiked}
             handleToggleLike={handleLikeClick}
-            onShareClick={handleShareLink}
             onMoreOptionsClick={handleToggleActionMenu}
             isActionMenuOpen={isActionMenuOpen}
             onEditActionClick={handleEditClick}
