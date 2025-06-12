@@ -30,18 +30,15 @@ const ShopTopControls = styled.div`
 const ActionIconsGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 22px;
   position: relative; /* <<< 매우 중요! */
 `;
 
 const IconButton = styled.button`
-  background: none;
-  border: none;
-  padding: 8px;
-  margin: 0;
-  cursor: pointer;
   display: flex;
   align-items: center;
+  width: 23px;
+  height: 23px;
   justify-content: center;
   img {
     display: block;
@@ -63,10 +60,10 @@ const ShopHandle = styled.p`
 
 const ActionMenu = styled.div`
   position: absolute;
-  top: 100%; /* 아이콘 바로 아래 */
+  top: calc(100% + 8px); /* 아이콘 바로 아래 */
   right: 0;
   background-color: white;
-  border-radius: 16px;
+  border-radius: 6px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   z-index: 20; /* 다른 요소 위에 오도록 */
   width: 160px; /* 메뉴 너비 */

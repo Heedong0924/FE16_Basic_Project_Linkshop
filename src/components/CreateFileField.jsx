@@ -21,12 +21,14 @@ const AddFileButton = styled.label`
   height: 31px;
   border: 1px solid ${theme.colors.pri};
   border-radius: 8px;
-  padding: 6px 12px;
   font-size: 14px;
   font-weight: 500;
   color: ${theme.colors.pri};
   white-space: nowrap;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const STFileInput = styled.input`

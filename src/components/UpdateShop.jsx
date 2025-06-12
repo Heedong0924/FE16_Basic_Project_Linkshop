@@ -71,6 +71,7 @@ export const PreviewGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex-grow: 1;
 `;
 
 export const ImgGroup = styled.div`

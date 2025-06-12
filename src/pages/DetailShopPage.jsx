@@ -12,7 +12,7 @@ import {
 } from '../api/api';
 import DeskTopBackgroundImg from '../assets/img/img_detailpage_bg_desktop.png';
 import BackgroundImg from '../assets/img/img_detailpage_bg_mobile.png';
-import TabletBackgroundImg from '../assets/img/img_detailpage_bg_tablet.png';
+import BackgroundImgPart from '../assets/img/img_detailpage_bg_part.png';
 import LinkHeader from '../components/LinkHeader';
 import PasswordModal from '../components/PasswordModal';
 import ProductList from '../components/ProductList';
@@ -31,7 +31,8 @@ const PageWrapper = styled.div`
 const MainContentLayoutWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
-  @media (min-width: 768px) and (max-width: 1023px) {
+  transition: 0.3s linear all;
+  @media (min-width: 768px) {
     max-width: 720px;
   }
   @media (min-width: 1024px) {
@@ -41,18 +42,17 @@ const MainContentLayoutWrapper = styled.div`
 
 const HeroSection = styled.div`
   width: 100%;
-  padding-top: 18.6667%;
-
+  height: 64px;
   background-image: url(${BackgroundImg});
-  background-size: 100%;
   background-repeat: repeat-x;
+  background-size: auto 100%; /* 높이에 맞춰 비율 유지 */
   background-position: top center;
+
   @media (min-width: 768px) {
-    padding-top: 10.335%;
-    background-image: url(${TabletBackgroundImg});
+    background-image: url(${BackgroundImgPart});
   }
+
   @media (min-width: 1024px) {
-    padding-top: 3.9764%;
     background-image: url(${DeskTopBackgroundImg});
   }
 `;
